@@ -1,0 +1,169 @@
+{
+  "config": {
+    "abort": {
+      "already_configured": "Der Akku-Planer ist bereits eingerichtet."
+    },
+    "error": {
+      "no_pv": "Mindestens eine PV-Quelle auswählen.",
+      "no_capacity": "Kapazität in kWh eintragen oder Ah- und Spannungs-Sensor wählen.",
+      "no_load": "Kein Hausverbrauch gefunden: Sensor wählen oder Netz und Solar im Energie-Dashboard einrichten."
+    },
+    "step": {
+      "user": {
+        "title": "Akku-Planer – deine Anlage",
+        "description": "Auf diesem System erkannt:\n{detected}\n\nPrüfe die Werte und ergänze, was fehlt. Der Planer startet im Modus **Nur beobachten** – es wird nichts geschrieben, bis du die Betriebsart umstellst.",
+        "data": {
+          "soc_entity": "Akku-Ladestand (%)",
+          "pv_entities": "PV-Quellen (Energiezähler in kWh oder Leistung in W, je Wechselrichter/String eine)",
+          "load_entity": "Hausverbrauch (optional – leer = aus dem Energie-Dashboard berechnet)",
+          "capacity_kwh": "Nutzbare Akkukapazität in kWh (0 = aus Ah × V berechnen)",
+          "capacity_ah_entity": "Installierte Kapazität in Ah (optional)",
+          "voltage_entity": "Akkuspannung (optional)",
+          "control_type": "Wie soll der Akku gesteuert werden?",
+          "warning_entity": "Unwetter-Warnstufe, z. B. DWD (optional)",
+          "pv_power_entity": "Nur Anzeige: aktuelle PV-Leistung",
+          "load_power_entity": "Nur Anzeige: aktueller Hausverbrauch",
+          "battery_power_entity": "Nur Anzeige: Akku-Leistung (Laden positiv)",
+          "grid_power_entity": "Nur Anzeige: Netzleistung (Bezug positiv)"
+        }
+      },
+      "control": {
+        "title": "Akku-Planer – Steuerung",
+        "description": "Wähle die Einstellung, die festlegt, wie weit der Akku entladen werden darf.",
+        "data": {
+          "min_soc_entity": "Mindest-SoC-Einstellung des Wechselrichters (wird gesteuert)",
+          "grid_source_entity": "Netzstatus zur Stromausfall-Erkennung (optional)",
+          "slot_start_entity": "Victron-Ladeplan: Startzeit",
+          "slot_duration_entity": "Victron-Ladeplan: Dauer",
+          "slot_soc_entity": "Victron-Ladeplan: Ziel-SoC",
+          "slot_days_entity": "Victron-Ladeplan: Tage",
+          "charge_switch_entity": "Schalter, der das Laden aus dem Netz erzwingt (optional)",
+          "grid_charge_power_kw": "Ladeleistung aus dem Netz (kW, für die Dauerberechnung)"
+        }
+      }
+    }
+  },
+  "options": {
+    "error": {
+      "no_pv": "Mindestens eine PV-Quelle auswählen.",
+      "no_capacity": "Kapazität in kWh eintragen oder Ah- und Spannungs-Sensor wählen.",
+      "no_load": "Kein Hausverbrauch gefunden: Sensor wählen oder Netz und Solar im Energie-Dashboard einrichten."
+    },
+    "step": {
+      "init": {
+        "title": "Akku-Planer – deine Anlage",
+        "data": {
+          "soc_entity": "Akku-Ladestand (%)",
+          "pv_entities": "PV-Quellen (Energiezähler in kWh oder Leistung in W, je Wechselrichter/String eine)",
+          "load_entity": "Hausverbrauch (optional – leer = aus dem Energie-Dashboard berechnet)",
+          "capacity_kwh": "Nutzbare Akkukapazität in kWh (0 = aus Ah × V berechnen)",
+          "capacity_ah_entity": "Installierte Kapazität in Ah (optional)",
+          "voltage_entity": "Akkuspannung (optional)",
+          "control_type": "Wie soll der Akku gesteuert werden?",
+          "warning_entity": "Unwetter-Warnstufe, z. B. DWD (optional)",
+          "pv_power_entity": "Nur Anzeige: aktuelle PV-Leistung",
+          "load_power_entity": "Nur Anzeige: aktueller Hausverbrauch",
+          "battery_power_entity": "Nur Anzeige: Akku-Leistung (Laden positiv)",
+          "grid_power_entity": "Nur Anzeige: Netzleistung (Bezug positiv)"
+        }
+      },
+      "control": {
+        "title": "Akku-Planer – Steuerung",
+        "description": "Wähle die Einstellung, die festlegt, wie weit der Akku entladen werden darf.",
+        "data": {
+          "min_soc_entity": "Mindest-SoC-Einstellung des Wechselrichters (wird gesteuert)",
+          "grid_source_entity": "Netzstatus zur Stromausfall-Erkennung (optional)",
+          "slot_start_entity": "Victron-Ladeplan: Startzeit",
+          "slot_duration_entity": "Victron-Ladeplan: Dauer",
+          "slot_soc_entity": "Victron-Ladeplan: Ziel-SoC",
+          "slot_days_entity": "Victron-Ladeplan: Tage",
+          "charge_switch_entity": "Schalter, der das Laden aus dem Netz erzwingt (optional)",
+          "grid_charge_power_kw": "Ladeleistung aus dem Netz (kW, für die Dauerberechnung)"
+        }
+      }
+    }
+  },
+  "selector": {
+    "control_type": {
+      "options": {
+        "victron": "Victron ESS (Mindest-SoC + Ladeplan)",
+        "number": "Andere Anlage: beliebige Mindest-SoC-Einstellung",
+        "none": "Nur Empfehlung (Sensoren für eigene Automationen)"
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "target_min_soc": {
+        "name": "Geplanter Mindest-SoC"
+      },
+      "reason": {
+        "name": "Begründung"
+      },
+      "pv_tomorrow": {
+        "name": "PV-Prognose morgen"
+      },
+      "pv_today_remaining": {
+        "name": "PV-Prognose Rest heute"
+      },
+      "refill": {
+        "name": "Sichere Nachladung"
+      },
+      "drain": {
+        "name": "Verbrauch bis Nachladung"
+      },
+      "soc_at_refill": {
+        "name": "Erwarteter SoC bei Nachladung"
+      },
+      "accuracy": {
+        "name": "Prognosegenauigkeit 7 Tage"
+      },
+      "pv_model": {
+        "name": "Gelernte PV-Leistung"
+      },
+      "forecast_days": {
+        "name": "PV-Prognose 4 Tage"
+      }
+    },
+    "binary_sensor": {
+      "grid_charge": {
+        "name": "Netznachladung"
+      },
+      "storm": {
+        "name": "Unwetter-Reserve aktiv"
+      }
+    },
+    "switch": {
+      "automatic": {
+        "name": "Automatik"
+      }
+    },
+    "select": {
+      "mode": {
+        "name": "Betriebsart",
+        "state": {
+          "observe": "Nur beobachten (Schattenbetrieb)",
+          "auto": "Automatisch nach Prognose",
+          "always_reserve": "Immer Reserve halten",
+          "full_use": "Akku voll nutzen"
+        }
+      }
+    },
+    "number": {
+      "reserve_soc": {
+        "name": "Notstrom-Reserve"
+      },
+      "floor_soc": {
+        "name": "Untergrenze bei Sonne"
+      },
+      "storm_reserve_soc": {
+        "name": "Reserve bei Unwetter"
+      }
+    },
+    "button": {
+      "retrain": {
+        "name": "Modelle neu lernen"
+      }
+    }
+  }
+}

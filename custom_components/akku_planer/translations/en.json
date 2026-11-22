@@ -1,0 +1,169 @@
+{
+  "config": {
+    "abort": {
+      "already_configured": "Akku-Planer is already set up."
+    },
+    "error": {
+      "no_pv": "Select at least one PV source.",
+      "no_capacity": "Enter the capacity in kWh or select Ah and voltage sensors.",
+      "no_load": "No house consumption found: select a sensor or set up grid and solar in the Energy dashboard."
+    },
+    "step": {
+      "user": {
+        "title": "Akku-Planer – your system",
+        "description": "Detected on this system:\n{detected}\n\nCheck the values and add what is missing. The planner starts in **observe only** mode – nothing is written until you switch the mode.",
+        "data": {
+          "soc_entity": "Battery state of charge (%)",
+          "pv_entities": "PV sources (energy meters in kWh or power sensors in W, one per inverter/string)",
+          "load_entity": "House consumption (optional – empty = calculated from the Energy dashboard)",
+          "capacity_kwh": "Usable battery capacity in kWh (0 = calculate from Ah × V)",
+          "capacity_ah_entity": "Installed capacity in Ah (optional)",
+          "voltage_entity": "Battery voltage (optional)",
+          "control_type": "How should the battery be controlled?",
+          "warning_entity": "Weather warning level, e.g. DWD (optional)",
+          "pv_power_entity": "Display only: current PV power",
+          "load_power_entity": "Display only: current house consumption",
+          "battery_power_entity": "Display only: battery power (charging positive)",
+          "grid_power_entity": "Display only: grid power (import positive)"
+        }
+      },
+      "control": {
+        "title": "Akku-Planer – control",
+        "description": "Choose the setting that limits how far the battery may be discharged.",
+        "data": {
+          "min_soc_entity": "Minimum SoC setting of the inverter (this value is controlled)",
+          "grid_source_entity": "Grid status for blackout detection (optional)",
+          "slot_start_entity": "Victron charge schedule: start",
+          "slot_duration_entity": "Victron charge schedule: duration",
+          "slot_soc_entity": "Victron charge schedule: target SoC",
+          "slot_days_entity": "Victron charge schedule: days",
+          "charge_switch_entity": "Switch that forces grid charging (optional)",
+          "grid_charge_power_kw": "Grid charging power (kW, used to estimate the duration)"
+        }
+      }
+    }
+  },
+  "options": {
+    "error": {
+      "no_pv": "Select at least one PV source.",
+      "no_capacity": "Enter the capacity in kWh or select Ah and voltage sensors.",
+      "no_load": "No house consumption found: select a sensor or set up grid and solar in the Energy dashboard."
+    },
+    "step": {
+      "init": {
+        "title": "Akku-Planer – your system",
+        "data": {
+          "soc_entity": "Battery state of charge (%)",
+          "pv_entities": "PV sources (energy meters in kWh or power sensors in W, one per inverter/string)",
+          "load_entity": "House consumption (optional – empty = calculated from the Energy dashboard)",
+          "capacity_kwh": "Usable battery capacity in kWh (0 = calculate from Ah × V)",
+          "capacity_ah_entity": "Installed capacity in Ah (optional)",
+          "voltage_entity": "Battery voltage (optional)",
+          "control_type": "How should the battery be controlled?",
+          "warning_entity": "Weather warning level, e.g. DWD (optional)",
+          "pv_power_entity": "Display only: current PV power",
+          "load_power_entity": "Display only: current house consumption",
+          "battery_power_entity": "Display only: battery power (charging positive)",
+          "grid_power_entity": "Display only: grid power (import positive)"
+        }
+      },
+      "control": {
+        "title": "Akku-Planer – control",
+        "description": "Choose the setting that limits how far the battery may be discharged.",
+        "data": {
+          "min_soc_entity": "Minimum SoC setting of the inverter (this value is controlled)",
+          "grid_source_entity": "Grid status for blackout detection (optional)",
+          "slot_start_entity": "Victron charge schedule: start",
+          "slot_duration_entity": "Victron charge schedule: duration",
+          "slot_soc_entity": "Victron charge schedule: target SoC",
+          "slot_days_entity": "Victron charge schedule: days",
+          "charge_switch_entity": "Switch that forces grid charging (optional)",
+          "grid_charge_power_kw": "Grid charging power (kW, used to estimate the duration)"
+        }
+      }
+    }
+  },
+  "selector": {
+    "control_type": {
+      "options": {
+        "victron": "Victron ESS (minimum SoC + charge schedule)",
+        "number": "Other inverter: any minimum SoC setting",
+        "none": "Recommendation only (sensors for own automations)"
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "target_min_soc": {
+        "name": "Planned minimum SoC"
+      },
+      "reason": {
+        "name": "Reason"
+      },
+      "pv_tomorrow": {
+        "name": "PV forecast tomorrow"
+      },
+      "pv_today_remaining": {
+        "name": "PV forecast rest of today"
+      },
+      "refill": {
+        "name": "Safe recharge"
+      },
+      "drain": {
+        "name": "Consumption until recharge"
+      },
+      "soc_at_refill": {
+        "name": "Expected SoC at recharge"
+      },
+      "accuracy": {
+        "name": "Forecast accuracy 7 days"
+      },
+      "pv_model": {
+        "name": "Learned PV power"
+      },
+      "forecast_days": {
+        "name": "PV forecast 4 days"
+      }
+    },
+    "binary_sensor": {
+      "grid_charge": {
+        "name": "Grid charging"
+      },
+      "storm": {
+        "name": "Storm reserve active"
+      }
+    },
+    "switch": {
+      "automatic": {
+        "name": "Automatic"
+      }
+    },
+    "select": {
+      "mode": {
+        "name": "Mode",
+        "state": {
+          "observe": "Observe only",
+          "auto": "Automatic (forecast)",
+          "always_reserve": "Always keep reserve",
+          "full_use": "Use full battery"
+        }
+      }
+    },
+    "number": {
+      "reserve_soc": {
+        "name": "Backup reserve"
+      },
+      "floor_soc": {
+        "name": "Floor when sunny"
+      },
+      "storm_reserve_soc": {
+        "name": "Storm reserve"
+      }
+    },
+    "button": {
+      "retrain": {
+        "name": "Retrain models"
+      }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "domain": "akku_planer",
+  "name": "Akku-Planer",
+  "after_dependencies": [
+    "energy"
+  ],
+  "codeowners": [
+    "@Matzen24"
+  ],
+  "config_flow": true,
+  "dependencies": [
+    "frontend",
+    "http",
+    "recorder"
+  ],
+  "documentation": "https://github.com/Matzen24/ha-akku-planer",
+  "integration_type": "service",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/Matzen24/ha-akku-planer/issues",
+  "requirements": [],
+  "version": "1.0.1"
+}
