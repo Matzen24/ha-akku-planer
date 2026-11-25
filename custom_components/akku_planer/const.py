@@ -25,6 +25,7 @@ CONF_BATTERY_POWER = "battery_power_entity"   # display only (cards)
 CONF_GRID_POWER = "grid_power_entity"         # display only (cards)
 CONF_PV_POWER = "pv_power_entity"             # display only (cards)
 CONF_LOAD_POWER = "load_power_entity"         # display only (cards)
+CONF_SHOW_PANEL = "show_panel"                # own page in the sidebar
 
 # --- Control types ---
 CONTROL_VICTRON = "victron"   # Victron ESS: minimum SoC + scheduled charge slot
@@ -38,6 +39,7 @@ DEFAULTS: dict[str, object] = {
     CONF_CAPACITY_KWH: 0.0,  # 0 = Ah x V
     CONF_PV_SOURCES: [],
     CONF_CHARGE_POWER: 3.0,
+    CONF_SHOW_PANEL: True,
 }
 
 # Values the very first (unpublished, version 1) config entries relied on implicitly.
@@ -98,3 +100,6 @@ FRONTEND_CARDS = (
     "akku-planer-forecast-card.js",
     "akku-planer-kpi-card.js",
 )
+PANEL_FILE = "akku-planer-panel.js"
+PANEL_URLS = ("akku-planer", "akku-planer-app")  # second one if a dashboard already uses the first
+PANEL_ICON = "mdi:home-battery"

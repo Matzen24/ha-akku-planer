@@ -36,7 +36,7 @@ from .const import (
     CONTROL_VICTRON,
 )
 
-from .sources import EnergySources, parse_energy_sources, pick_soc
+from .sources import EnergySources, parse_energy_sources, pick_power, pick_soc
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -101,6 +101,22 @@ async def async_detect(hass: HomeAssistant) -> tuple[dict[str, Any], list[str]]:
             found[CONF_CAPACITY_AH] = ah
             if v := _ends(same_dev, "sensor", "_battery_voltage") or _ends(same_dev, "sensor", "_voltage"):
                 found[CONF_VOLTAGE] = v
+
+    # --- Live power for the cards (only if the Energy dashboard did not provide it)
+    power: list[tuple[str, str, str | None]] = []
+    for e in entries:
+        if e.domain != "sensor" or e.disabled_by or e.platform == "akku_planer":
+            continue
+        if (e.device_class or e.original_device_class) == "power":
+            power.append((e.entity_id, e.platform, e.device_id))
+    soc_reg = reg.async_get(found[CONF_SOC]) if CONF_SOC in found else None
+    soc_dev = soc_reg.device_id if soc_reg else None
+    if CONF_BATTERY_POWER not in found and (b := pick_power("battery", power, soc_dev)):
+        found[CONF_BATTERY_POWER] = b
+    if CONF_GRID_POWER not in found and (g := pick_power("grid", power)):
+        found[CONF_GRID_POWER] = g
+    if CONF_PV_POWER not in found and len(energy.solar_power) != 1 and (p := pick_power("pv", power, unique=True)):
+        found[CONF_PV_POWER] = p
 
     # --- Victron ESS (victron_mqtt integration)
     victron = [e for e in entries if e.platform == "victron_mqtt"]

@@ -24,7 +24,8 @@
           "pv_power_entity": "Nur Anzeige: aktuelle PV-Leistung",
           "load_power_entity": "Nur Anzeige: aktueller Hausverbrauch",
           "battery_power_entity": "Nur Anzeige: Akku-Leistung (Laden positiv)",
-          "grid_power_entity": "Nur Anzeige: Netzleistung (Bezug positiv)"
+          "grid_power_entity": "Nur Anzeige: Netzleistung (Bezug positiv)",
+          "show_panel": "Akku-Planer-Seite in der Seitenleiste anzeigen"
         }
       },
       "control": {
@@ -64,7 +65,8 @@
           "pv_power_entity": "Nur Anzeige: aktuelle PV-Leistung",
           "load_power_entity": "Nur Anzeige: aktueller Hausverbrauch",
           "battery_power_entity": "Nur Anzeige: Akku-Leistung (Laden positiv)",
-          "grid_power_entity": "Nur Anzeige: Netzleistung (Bezug positiv)"
+          "grid_power_entity": "Nur Anzeige: Netzleistung (Bezug positiv)",
+          "show_panel": "Akku-Planer-Seite in der Seitenleiste anzeigen"
         }
       },
       "control": {

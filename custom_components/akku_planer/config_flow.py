@@ -24,6 +24,7 @@ from .const import (
     CONF_MIN_SOC,
     CONF_PV_POWER,
     CONF_PV_SOURCES,
+    CONF_SHOW_PANEL,
     CONF_SLOT_DAYS,
     CONF_SLOT_DURATION,
     CONF_SLOT_SOC,
@@ -76,6 +77,7 @@ def _system_schema(v: dict[str, Any]) -> vol.Schema:
         _opt(v, CONF_LOAD_POWER): _ent("sensor"),
         _opt(v, CONF_BATTERY_POWER): _ent("sensor"),
         _opt(v, CONF_GRID_POWER): _ent("sensor"),
+        vol.Optional(CONF_SHOW_PANEL, default=bool(v.get(CONF_SHOW_PANEL, True))): selector.BooleanSelector(),
     })
 
 

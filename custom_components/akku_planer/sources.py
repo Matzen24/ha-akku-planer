@@ -96,3 +96,45 @@ def pick_soc(candidates: list[tuple[str, str, str | None]], battery_devices: set
 
     best = max(candidates, key=score, default=None)
     return best[0] if best and score(best) > 0 else None
+
+
+_PHASE = re.compile(r"(_l[123]|_phase_?[abc123]|_p[123])(_|$)")
+POWER_PATTERNS = {
+    "battery": re.compile(r"(batter(y|ie)|akku).*(power|leistung)|(power|leistung).*(batter(y|ie)|akku)"),
+    "grid": re.compile(r"(^|_)(grid|netz)(_|$).*(power|leistung)|(power|leistung).*(^|_)(grid|netz)($|_)"),
+    "pv": re.compile(r"(^|_)(pv|solar|photovoltai\w*)\d*(_|$).*(power|leistung)|(power|leistung).*(^|_)(pv|solar)($|_)"),
+}
+
+
+def pick_power(
+    kind: str,
+    candidates: list[tuple[str, str, str | None]],
+    prefer_device: str | None = None,
+    unique: bool = False,
+) -> str | None:
+    """Choose a total (not per phase) power sensor of one kind: "battery", "grid" or "pv".
+
+    candidates: (entity_id, platform, device_id) of sensors with device_class power.
+    unique: only return a sensor if it is the only match (several PV inverters -> the card adds them up).
+    Pure function, unit tested.
+    """
+    pattern = POWER_PATTERNS[kind]
+
+    def score(c: tuple[str, str, str | None]) -> int:
+        eid, platform, dev = c
+        obj = eid.split(".", 1)[1]
+        if not pattern.search(obj) or _PHASE.search(obj):
+            return -1
+        s = 10
+        if prefer_device and dev == prefer_device:
+            s += 100
+        if platform in _VENDOR_PLATFORMS:
+            s += 50
+        if re.search(r"(current|strom|voltage|spannung|max|min|limit|setpoint|sollwert|forecast|prognose)", obj):
+            s -= 40
+        return s - len(obj) // 20  # shorter, more generic names first
+
+    good = [c for c in candidates if score(c) > 0]
+    if not good or (unique and len(good) > 1):
+        return None
+    return max(good, key=score)[0]

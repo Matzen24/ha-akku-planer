@@ -228,6 +228,7 @@ class AkkuPlanerCoordinator(DataUpdateCoordinator[dict[str, Any]]):
             "soc": self.cfg(CONF_SOC),
             "min_soc": self.cfg(CONF_MIN_SOC) if self.control != CONTROL_NONE else None,
             "pv_power": self.cfg(CONF_PV_POWER),
+            "pv_sources": list(self.cfg(CONF_PV_SOURCES) or []),
             "load_power": self.cfg(CONF_LOAD_POWER) or self.cfg(CONF_LOAD),
             "battery_power": self.cfg(CONF_BATTERY_POWER),
             "grid_power": self.cfg(CONF_GRID_POWER),

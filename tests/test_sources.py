@@ -3,7 +3,7 @@
 from datetime import datetime
 
 from custom_components.akku_planer.planner import PlanInput, make_plan
-from custom_components.akku_planer.sources import parse_energy_sources, pick_soc
+from custom_components.akku_planer.sources import parse_energy_sources, pick_power, pick_soc
 
 PREFS = [
     {"type": "grid", "stat_energy_from": "sensor.grid_in", "stat_energy_to": "sensor.grid_out",
@@ -55,3 +55,26 @@ def test_plan_english_text():
                                capacity_kwh=20, reserve=50, floor=15, storm_reserve=80, lang="en-GB"))
     assert plan.decision == "sonnig"
     assert "safe surplus" in plan.reason and "Mo 08:00" in plan.reason
+
+
+POWER = [
+    ("sensor.victron_mqtt_system_0_system_grid_power_l1_2", "victron_mqtt", "sys"),
+    ("sensor.victron_mqtt_grid_30_grid_power", "victron_mqtt", "grid"),
+    ("sensor.victron_mqtt_system_0_system_dc_battery_power", "victron_mqtt", "sys"),
+    ("sensor.victron_mqtt_battery_512_battery_power", "victron_mqtt", "bat"),
+    ("sensor.victron_mqtt_system_0_system_dc_pv_power", "victron_mqtt", "sys"),
+    ("sensor.pv1_power", "solarman", "pv1"),
+    ("sensor.waschmaschine_power", "shelly", "wm"),
+]
+
+
+def test_pick_power_totals_and_battery_device():
+    assert pick_power("grid", POWER) == "sensor.victron_mqtt_grid_30_grid_power"  # per-phase skipped
+    assert pick_power("battery", POWER, "bat") == "sensor.victron_mqtt_battery_512_battery_power"
+    assert pick_power("battery", [("sensor.ess_setpoint_battery_power", "x", None)]) is None
+    assert pick_power("grid", [("sensor.waschmaschine_power", "shelly", "wm")]) is None
+
+
+def test_pick_power_pv_only_when_unambiguous():
+    assert pick_power("pv", POWER, unique=True) is None  # several inverters -> the card adds them up
+    assert pick_power("pv", [("sensor.solar_power", "fronius", "inv")], unique=True) == "sensor.solar_power"

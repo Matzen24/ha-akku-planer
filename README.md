@@ -31,6 +31,7 @@ Setup reads your **Energy dashboard** and entity registry and pre-fills everythi
 | State of charge | battery sensor of your inverter |
 | Capacity | Ah × V sensors (Victron) or a fixed kWh value |
 | Control | Victron ESS is detected automatically; any other `number` / `input_number` can be selected |
+| Live power for the cards | Energy dashboard, otherwise battery / grid / PV power sensors of your inverter. Without a total PV sensor the card adds up the PV sources; house consumption is calculated from PV, grid and battery |
 
 You only fill in what is missing. Akku-Planer always starts in **Observe only** mode and writes nothing. Watch *Reason*, *Planned minimum SoC* and *Forecast accuracy* for a week or two, then switch the mode to *Automatic*.
 
@@ -43,8 +44,11 @@ You only fill in what is missing. Akku-Planer always starts in **Observe only** 
 
 Safety: the minimum SoC is changed in 5 % steps and at most 6 times a day (flash wear), except for storm warnings. Turning *Automatic* off stops a running grid charge.
 
-## Dashboard cards
-The integration ships four Lovelace cards; they find their entities automatically:
+## Dashboard
+Right after setup an **Akku-Planer** page appears in the sidebar with all cards – no dashboard editing,
+no resources, no entity ids. You can hide it in the integration options (*Show the Akku-Planer page in the sidebar*).
+
+The integration also ships the four Lovelace cards for your own dashboards; they find their entities automatically:
 
 ```yaml
 type: custom:akku-planer-card          # animated battery, energy flow, forecast
@@ -83,6 +87,8 @@ Die PV-Prognose **lernt die Ausrichtung deiner Module selbst** aus den Messwerte
 **Installation:** HACS → ⋮ → *Benutzerdefinierte Repositories* → `https://github.com/Matzen24/ha-akku-planer` als *Integration* hinzufügen → installieren → neu starten → *Einstellungen → Geräte & Dienste → Integration hinzufügen → Akku-Planer*.
 
 Die Einrichtung liest das **Energie-Dashboard** und füllt alles vor, was sie findet: PV-Quellen, Hausverbrauch (berechnet), Akku-Ladestand, Victron-Steuerung. Du ergänzt nur, was fehlt. Der Planer startet immer im Modus **Nur beobachten** und schreibt nichts. Nach ein bis zwei Wochen stellst du auf *Automatisch nach Prognose*.
+
+**Dashboard:** Nach der Einrichtung erscheint in der Seitenleiste die Seite **Akku-Planer** mit allen Karten – ohne Dashboard bearbeiten, ohne Ressourcen, ohne Entitäten eintragen. In den Optionen der Integration lässt sie sich ausblenden. Die vier Karten kannst du zusätzlich in eigene Dashboards einbauen.
 
 **Steuerarten:** *Victron ESS* (Mindest-SoC + Ladeplan 1), *Andere Anlage* (beliebige Mindest-SoC-Einstellung, optional ein Schalter fürs Netzladen) oder *Nur Empfehlung* (nur Sensoren für eigene Automationen).
 

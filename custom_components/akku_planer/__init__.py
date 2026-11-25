@@ -11,7 +11,20 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.typing import ConfigType
 
-from .const import CONF_CONTROL, CONF_MIN_SOC, CONF_SLOT_DAYS, CONTROL_VICTRON, DOMAIN, FRONTEND_CARDS, FRONTEND_URL, LEGACY_V1_DEFAULTS
+from .const import (
+    CONF_CONTROL,
+    CONF_MIN_SOC,
+    CONF_SHOW_PANEL,
+    CONF_SLOT_DAYS,
+    CONTROL_VICTRON,
+    DOMAIN,
+    FRONTEND_CARDS,
+    FRONTEND_URL,
+    LEGACY_V1_DEFAULTS,
+    PANEL_FILE,
+    PANEL_ICON,
+    PANEL_URLS,
+)
 from .coordinator import AkkuPlanerCoordinator
 
 _LOGGER = logging.getLogger(__name__)
@@ -43,6 +56,7 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
         await hass.http.async_register_static_paths([StaticPathConfig(FRONTEND_URL, str(path), True)])
         for card in FRONTEND_CARDS:
             add_extra_js_url(hass, f"{FRONTEND_URL}/{card}?v={version}")
+        hass.data[f"{DOMAIN}_version"] = version
     except Exception:  # noqa: BLE001 - cards are optional, the integration works without them
         _LOGGER.warning("Akku-Planer cards could not be registered", exc_info=True)
     return True
@@ -55,7 +69,37 @@ async def async_setup_entry(hass: HomeAssistant, entry: AkkuPlanerConfigEntry) -
     entry.runtime_data = coordinator
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     entry.async_on_unload(entry.add_update_listener(_async_reload))
+    if {**entry.data, **entry.options}.get(CONF_SHOW_PANEL, True):
+        await _async_register_panel(hass, entry)
     return True
+
+
+async def _async_register_panel(hass: HomeAssistant, entry: AkkuPlanerConfigEntry) -> None:
+    """Own page in the sidebar with all cards: works right after installation, no dashboard needed."""
+    try:
+        from homeassistant.components import frontend, panel_custom  # noqa: PLC0415
+
+        panels = hass.data.get(frontend.DATA_PANELS, {})
+        url = next((u for u in PANEL_URLS if u not in panels), None)
+        if url is None:
+            _LOGGER.warning("Akku-Planer page not added: %s are already in use", ", ".join(PANEL_URLS))
+            return
+        version = hass.data.get(f"{DOMAIN}_version", "0")
+        title = "Akku-Planer"
+        await panel_custom.async_register_panel(
+            hass,
+            frontend_url_path=url,
+            webcomponent_name="akku-planer-panel",
+            sidebar_title=title,
+            sidebar_icon=PANEL_ICON,
+            module_url=f"{FRONTEND_URL}/{PANEL_FILE}?v={version}",
+            embed_iframe=False,
+            require_admin=False,
+            config={"title": title},
+        )
+        entry.async_on_unload(lambda: frontend.async_remove_panel(hass, url))
+    except Exception:  # noqa: BLE001 - the page is optional, the integration works without it
+        _LOGGER.warning("Akku-Planer page could not be added to the sidebar", exc_info=True)
 
 
 async def _async_reload(hass: HomeAssistant, entry: AkkuPlanerConfigEntry) -> None:

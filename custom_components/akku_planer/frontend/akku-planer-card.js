@@ -23,7 +23,7 @@ var apResolve = function (hass, ents, userEnts, extra) {
     if (userEnts && userEnts[k]) continue;
     if (keys[k] && keys[k] in map) ents[k] = map[keys[k]] || "";
   }
-  return true;
+  return map;
 };
 
 const APC_DEFAULTS = {
@@ -91,6 +91,13 @@ class AkkuPlanerCard extends HTMLElement {
   /* ---------- Hilfen ---------- */
   _st(key) { return this._hass && this._hass.states[this._e[key]]; }
   _num(key) { const s = this._st(key); const v = s ? parseFloat(s.state) : NaN; return isNaN(v) ? null : v; }
+  _watts(id) {
+    const s = this._hass && this._hass.states[id];
+    const v = s ? parseFloat(s.state) : NaN;
+    if (isNaN(v)) return null;
+    const f = { w: 1, kw: 1000, mw: 1e6 }[String(s.attributes.unit_of_measurement || "").toLowerCase()];
+    return f ? v * f : null;
+  }
   _el(tag, attrs = {}, parent) {
     const n = document.createElementNS(NS, tag);
     for (const [k, v] of Object.entries(attrs)) n.setAttribute(k, v);
@@ -451,10 +458,21 @@ svg{width:100%;height:auto;display:block;overflow:visible}
 
     // Flüsse
     if (this._flows) {
-      const pv = Math.max(0, this._num("pv_power") || 0);
+      // Kein Gesamt-PV-Sensor: die PV-Quellen der Integration addieren (nur Leistungssensoren)
+      let pv = this._num("pv_power");
+      if (pv === null && this._apr && Array.isArray(this._apr.pv_sources)) {
+        for (const id of this._apr.pv_sources) {
+          const w = this._watts(id);
+          if (w !== null) pv = (pv || 0) + w;
+        }
+      }
+      pv = Math.max(0, pv || 0);
       const grid = this._num("grid_power") || 0;
-      const load = Math.max(0, this._num("load_power") || 0);
       const bat = this._num("battery_power") || 0; // + = Laden
+      // Kein Verbrauchssensor: Haus = PV + Netzbezug - Akkuladung
+      let load = this._num("load_power");
+      if (load === null && (this._st("grid_power") || this._st("battery_power"))) load = pv + grid - bat;
+      load = Math.max(0, load || 0);
       const pvToBat = bat > 0 ? Math.min(pv, bat) : 0;
       const gridToBat = bat > 0 ? Math.max(0, bat - pvToBat) : 0;
       const batToHouse = bat < 0 ? -bat : 0;

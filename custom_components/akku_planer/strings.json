@@ -24,7 +24,8 @@
           "pv_power_entity": "Display only: current PV power",
           "load_power_entity": "Display only: current house consumption",
           "battery_power_entity": "Display only: battery power (charging positive)",
-          "grid_power_entity": "Display only: grid power (import positive)"
+          "grid_power_entity": "Display only: grid power (import positive)",
+          "show_panel": "Show the Akku-Planer page in the sidebar"
         }
       },
       "control": {
@@ -64,7 +65,8 @@
           "pv_power_entity": "Display only: current PV power",
           "load_power_entity": "Display only: current house consumption",
           "battery_power_entity": "Display only: battery power (charging positive)",
-          "grid_power_entity": "Display only: grid power (import positive)"
+          "grid_power_entity": "Display only: grid power (import positive)",
+          "show_panel": "Show the Akku-Planer page in the sidebar"
         }
       },
       "control": {
