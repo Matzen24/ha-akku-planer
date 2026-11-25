@@ -48,13 +48,14 @@ Safety: the minimum SoC is changed in 5 % steps and at most 6 times a day (flash
 Right after setup an **Akku-Planer** page appears in the sidebar with all cards – no dashboard editing,
 no resources, no entity ids. You can hide it in the integration options (*Show the Akku-Planer page in the sidebar*).
 
-The integration also ships the four Lovelace cards for your own dashboards; they find their entities automatically:
+The integration also ships the five Lovelace cards for your own dashboards; they find their entities automatically:
 
 ```yaml
 type: custom:akku-planer-card          # animated battery, energy flow, forecast
 type: custom:akku-planer-control-card  # mode, automatic, draggable limits
 type: custom:akku-planer-forecast-card # 4-day hourly forecast
 type: custom:akku-planer-kpi-card      # key figures
+type: custom:akku-planer-analysis-card # SoC history, forecast vs. actual, learned PV model
 ```
 Card texts are German for now. Any entity can be overridden with `entities: {soc: sensor.x, ...}`.
 
@@ -88,7 +89,7 @@ Die PV-Prognose **lernt die Ausrichtung deiner Module selbst** aus den Messwerte
 
 Die Einrichtung liest das **Energie-Dashboard** und füllt alles vor, was sie findet: PV-Quellen, Hausverbrauch (berechnet), Akku-Ladestand, Victron-Steuerung. Du ergänzt nur, was fehlt. Der Planer startet immer im Modus **Nur beobachten** und schreibt nichts. Nach ein bis zwei Wochen stellst du auf *Automatisch nach Prognose*.
 
-**Dashboard:** Nach der Einrichtung erscheint in der Seitenleiste die Seite **Akku-Planer** mit allen Karten – ohne Dashboard bearbeiten, ohne Ressourcen, ohne Entitäten eintragen. In den Optionen der Integration lässt sie sich ausblenden. Die vier Karten kannst du zusätzlich in eigene Dashboards einbauen.
+**Dashboard:** Nach der Einrichtung erscheint in der Seitenleiste die Seite **Akku-Planer** mit allen Karten – ohne Dashboard bearbeiten, ohne Ressourcen, ohne Entitäten eintragen. In den Optionen der Integration lässt sie sich ausblenden. Die fünf Karten kannst du zusätzlich in eigene Dashboards einbauen.
 
 **Steuerarten:** *Victron ESS* (Mindest-SoC + Ladeplan 1), *Andere Anlage* (beliebige Mindest-SoC-Einstellung, optional ein Schalter fürs Netzladen) oder *Nur Empfehlung* (nur Sensoren für eigene Automationen).
 

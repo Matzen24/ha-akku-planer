@@ -220,7 +220,7 @@ class AkkuPlanerCoordinator(DataUpdateCoordinator[dict[str, Any]]):
             ("sensor", "refill"), ("sensor", "drain"), ("sensor", "soc_at_refill"), ("sensor", "accuracy"),
             ("number", "reserve_soc"), ("number", "floor_soc"), ("number", "storm_reserve_soc"),
             ("select", "mode"), ("switch", "automatic"), ("binary_sensor", "grid_charge"),
-            ("binary_sensor", "storm"),
+            ("binary_sensor", "storm"), ("button", "retrain"),
         ):
             own[key] = reg.async_get_entity_id(platform, DOMAIN, f"{self.entry.entry_id}_{key}")
         return {

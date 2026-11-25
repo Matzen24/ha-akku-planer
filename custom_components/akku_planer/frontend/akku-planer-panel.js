@@ -1,12 +1,13 @@
 /* Akku-Planer page in the sidebar: all bundled cards, laid out like the "Cockpit" dashboard.
  * Registered by the integration itself, so it works right after installation. */
-const APP_VERSION = "1.1.0";
+const APP_VERSION = "1.2.0";
 
 const APP_LAYOUT = [
   { type: "akku-planer-card", config: { view: "full" }, wide: true },
   { type: "akku-planer-forecast-card", config: {}, wide: true },
   { type: "akku-planer-control-card", config: {} },
   { type: "akku-planer-kpi-card", config: {} },
+  { type: "akku-planer-analysis-card", config: {}, wide: true },
 ];
 
 class AkkuPlanerPanel extends HTMLElement {

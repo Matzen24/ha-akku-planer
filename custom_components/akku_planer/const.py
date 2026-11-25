@@ -99,6 +99,7 @@ FRONTEND_CARDS = (
     "akku-planer-control-card.js",
     "akku-planer-forecast-card.js",
     "akku-planer-kpi-card.js",
+    "akku-planer-analysis-card.js",
 )
 PANEL_FILE = "akku-planer-panel.js"
 PANEL_URLS = ("akku-planer", "akku-planer-app")  # second one if a dashboard already uses the first
